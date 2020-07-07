@@ -1,0 +1,15 @@
+.ports-row {
+    display: flex;
+    /*margin: 5px 0 10px 0;*/
+    /*font-weight: 300;*/
+}
+
+.ports-row > div {
+    /*margin-right: 10px;*/
+}
+
+/*
+.ports-row span {
+    margin-right: 5px;
+}
+*/
