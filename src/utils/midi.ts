@@ -86,4 +86,16 @@ export function NRPM(MSB: number, LSB: number, value: number, channel: number): 
     ];
 }
 
+export function pitchBend(value: number, channel: number): OutMessage {
+    if (value < 0) value = value + 8192;
+    const msb = (value & 0b0011111110000000) >> 7;
+    const lsb = value & 0b0000000001111111;
+    return [
+        MIDI_VOICE_PITCH_BEND_CHANGE + channel,
+        lsb,
+        msb
+    ];
+}
+
+
 

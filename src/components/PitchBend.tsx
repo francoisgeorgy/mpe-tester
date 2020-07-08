@@ -1,6 +1,7 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React, {FormEvent, useState} from "react";
+import {pitchBend} from "../utils/midi";
 
 export const PitchBend = observer(() => {
 
@@ -11,6 +12,21 @@ export const PitchBend = observer(() => {
     const [bendSelect, setBendSelect] = useState("48");
     const [bendCustom, setBendCustom] = useState("");
     const [bend, setBend] = useState(0);
+
+    const send = (b:number) => {
+        // if (midi) {
+            midi.send([
+                ...pitchBend(b + 8192, 0)
+            ]);
+        // }
+    };
+
+    const updateBend = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const b: number = parseInt(e.target.value, 10);
+        //TODO: check that b != NaN
+        setBend(b);
+        send(b);
+    };
 
     // if (!midi.interface) {
     //     return null;
@@ -44,21 +60,21 @@ export const PitchBend = observer(() => {
                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBendCustom(e.target.value)} className="space-right" />}
             </div>
             <div>
-                <input type="range" min="-8192" max="8191" value={bend} list="ticks" onChange={(e)=>setBend(parseInt(e.target.value, 10))}/>
+                <input type="range" min="-8192" max="8191" value={bend} list="ticks" onChange={updateBend}/>
                 <datalist id="ticks">
                     <option value="-8192"></option>
                     <option value="0"></option>
                     <option value="8191"></option>
                 </datalist>
-                <div>
-                    Bend range: {range}
-                </div>
-                <div>
-                    Bend position: {bend}
-                </div>
-                <div>
-                    Bend in semitones according to range: {semi.toFixed(2)}
-                </div>
+            </div>
+            <div>
+                Bend range: {range}
+            </div>
+            <div>
+                Bend position: {bend}
+            </div>
+            <div>
+                Bend in semitones according to range: {semi.toFixed(2)}
             </div>
         </div>
     );
