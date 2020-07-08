@@ -22,8 +22,7 @@ export const PitchBend = observer(() => {
     };
 
     const updateBend = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const b: number = parseInt(e.target.value, 10);
-        //TODO: check that b != NaN
+        const b: number = parseInt(e.target.value, 10);             //TODO: check that b != NaN
         setBend(b);
         send(b);
     };
@@ -54,7 +53,7 @@ export const PitchBend = observer(() => {
                     <option value="24">+/- 24</option>
                     <option value="48">+/- 48</option>
                     <option value="custom">custom</option>
-                </select>
+                </select> semitones
                 {bendSelect === "custom" &&
                 <input type="text" value={bendCustom} placeholder="enter custom pitch bend value"
                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBendCustom(e.target.value)} className="space-right" />}

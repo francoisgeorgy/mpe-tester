@@ -1,5 +1,6 @@
 import {decorate, observable} from "mobx";
 import {
+    MIDI_VOICE_CHANNEL_PRESSURE,
     MIDI_VOICE_CONTROL_CHANGE,
     MIDI_VOICE_NOTE_OFF,
     MIDI_VOICE_NOTE_ON,
@@ -142,7 +143,11 @@ class MidiStore {
 
         //TODO: validate parameters
 
-        this.outputInUse.send([MIDI_VOICE_CONTROL_CHANGE + channel, controller, value]);
+        this.outputInUse.send([
+            MIDI_VOICE_CONTROL_CHANGE + channel,
+            controller & 0x7f,
+            value & 0x7f
+        ]);
     }
 
     // channel is 0..15
@@ -165,6 +170,12 @@ class MidiStore {
         this.sendCC(100, 127, channel);
     }
 
+    channelPressure(value: number, channel: number = this.channel): void {
+        this.send([
+            MIDI_VOICE_CHANNEL_PRESSURE + channel,
+            value & 0x7f,
+        ]);
+    }
 
     pitchBend(value: number, channel: number = this.channel): void {
         if (value < 0) value = value + 8192;
@@ -185,16 +196,16 @@ class MidiStore {
     noteOn(note: number, velocity= 127, channel = this.channel) {
         this.send([
             MIDI_VOICE_NOTE_ON + channel,
-            note,
-            velocity
+            note & 0x7f,
+            velocity & 0x7f
         ]);
     }
 
     noteOff(note: number, releaseVelocity = 127, channel = this.channel) {
         this.send([
             MIDI_VOICE_NOTE_OFF + channel,
-            note,
-            releaseVelocity
+            note & 0x7f,
+            releaseVelocity & 0x7f
         ]);
     }
 

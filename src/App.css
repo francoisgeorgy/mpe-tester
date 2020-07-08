@@ -163,7 +163,15 @@ button.fit {
     float: right;
 }
 
-input[type="range"] {
+.pitch-bend input[type="range"] {
     width: 80%;
+}
+
+.timbre input[type="range"] {
+    width: 40%;
+}
+
+.pressure input[type="range"] {
+    width: 40%;
 }
 
