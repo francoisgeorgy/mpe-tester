@@ -30,6 +30,10 @@ header a {
     text-decoration: none;
 }
 
+.trackpad {
+    width: 400px;
+}
+
 /*
 .header > div {
     margin-left: 10px;

@@ -6,6 +6,7 @@ import {Drone} from "./components/Drone";
 import './App.css';
 import {Timbre} from "./components/Timbre";
 import {Pressure} from "./components/Pressure";
+import {Trackpad} from "./components/Trackpad";
 
 function App() {
 
@@ -30,6 +31,11 @@ function App() {
                 <Panel>
                     <Pressure/>
                 </Panel>
+{/*
+                <Panel>
+                    <Trackpad/>
+                </Panel>
+*/}
             </main>
         </div>
     );
