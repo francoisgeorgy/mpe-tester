@@ -4,8 +4,8 @@
     /*font-weight: 300;*/
 }
 
-.ports-row > div {
-    /*margin-right: 10px;*/
+.port-wrapper select {
+    margin-left: 5px;
 }
 
 /*
