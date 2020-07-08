@@ -67,6 +67,7 @@ export function parseMidiMessage(message: WebMidi.MIDIMessageEvent): MidiMessage
 
 export type OutMessage = number[];
 
+/*
 export function CC(controller: number, value: number, channel: number): OutMessage {
     return [
         MIDI_VOICE_CONTROL_CHANGE + channel,
@@ -85,6 +86,8 @@ export function NRPM(MSB: number, LSB: number, value: number, channel: number): 
         ...CC(100, 127, channel)
     ];
 }
+*/
+/*
 
 export function pitchBend(value: number, channel: number): OutMessage {
     if (value < 0) value = value + 8192;
@@ -99,3 +102,4 @@ export function pitchBend(value: number, channel: number): OutMessage {
 
 
 
+*/

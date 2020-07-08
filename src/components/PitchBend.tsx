@@ -1,7 +1,6 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React, {FormEvent, useState} from "react";
-import {pitchBend} from "../utils/midi";
 
 export const PitchBend = observer(() => {
 
@@ -15,9 +14,10 @@ export const PitchBend = observer(() => {
 
     const send = (b:number) => {
         // if (midi) {
-            midi.send([
-                ...pitchBend(b + 8192, 0)
-            ]);
+        midi.pitchBend(b + 8192);
+            // midi.send([
+            //     ...pitchBend(b + 8192, 0)
+            // ]);
         // }
     };
 
@@ -44,7 +44,7 @@ export const PitchBend = observer(() => {
 
     return (
         <div className="pitch-bend">
-            <h2>Pitch Bend</h2>
+            <h2>Pitch Bend (X)</h2>
             <div>
                 <label>Pitch bend range:</label>
                 <select value={bendSelect} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setBendSelect(e.target.value)}>

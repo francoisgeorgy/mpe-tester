@@ -1,5 +1,11 @@
 import {decorate, observable} from "mobx";
-import {MIDI_VOICE_CONTROL_CHANGE, OutMessage} from "../utils/midi";
+import {
+    MIDI_VOICE_CONTROL_CHANGE,
+    MIDI_VOICE_NOTE_OFF,
+    MIDI_VOICE_NOTE_ON,
+    MIDI_VOICE_PITCH_BEND_CHANGE,
+    OutMessage
+} from "../utils/midi";
 
 // import {hs} from "../utils";
 
@@ -42,6 +48,8 @@ class MidiStore {
     // subscribers: InterfaceSubscriber[];     // called when an input is set in use
     listeners: PortListener[] = [];
 
+    channel = 0;
+
     constructor() {
         // console.log("MidiStore constructor");
         // this.rootStore = rootStore;
@@ -51,6 +59,15 @@ class MidiStore {
         this.onStateChange = this.onStateChange.bind(this);     // very important
         this.onMidiMessage = this.onMidiMessage.bind(this);     // very important
         this.requestMidi(); //.then(r => console.log(r));
+
+        this.channel = 0;
+    }
+
+    setChannel(channel: number) {
+        // if (channel === 'all') {
+        //     // TODO
+        // }
+        this.channel = channel;
     }
 
     autoSelect(name: RegExp) {
@@ -115,7 +132,7 @@ class MidiStore {
         this.outputInUse.send(messages);
     }
 
-    sendCC(controller: number, value: number, channel: number): void {
+    sendCC(controller: number, value: number, channel: number = this.channel): void {
 
         // const port = this.outputById(this.outputInUseId);
         // if (!port) return;
@@ -129,7 +146,7 @@ class MidiStore {
     }
 
     // channel is 0..15
-    sendNRPN(MSB: number, LSB: number, value: number, channel: number): void {
+    sendNRPN(MSB: number, LSB: number, value: number, channel: number = this.channel): void {
 
         // console.log("midi.sendNRPN");
 
@@ -148,6 +165,38 @@ class MidiStore {
         this.sendCC(100, 127, channel);
     }
 
+
+    pitchBend(value: number, channel: number = this.channel): void {
+        if (value < 0) value = value + 8192;
+        const msb = (value & 0b0011111110000000) >> 7;
+        const lsb = value & 0b0000000001111111;
+        // return [
+        //     MIDI_VOICE_PITCH_BEND_CHANGE + channel,
+        //     lsb,
+        //     msb
+        // ];
+        this.send([
+            MIDI_VOICE_PITCH_BEND_CHANGE + channel,
+            lsb,
+            msb
+        ]);
+    }
+
+    noteOn(note: number, velocity= 127, channel = this.channel) {
+        this.send([
+            MIDI_VOICE_NOTE_ON + channel,
+            note,
+            velocity
+        ]);
+    }
+
+    noteOff(note: number, releaseVelocity = 127, channel = this.channel) {
+        this.send([
+            MIDI_VOICE_NOTE_OFF + channel,
+            note,
+            releaseVelocity
+        ]);
+    }
 
     connectInput(id: string) {
         for (let input of this.interface.inputs.values()) {
@@ -426,7 +475,8 @@ decorate(MidiStore, {
     inputs: observable,
     outputs: observable,
     inputInUseId: observable,
-    outputInUseId: observable
+    outputInUseId: observable,
+    channel: observable
     // setConnection: action,
     // ins: computed   //,
     // outs: computed

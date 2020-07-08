@@ -40,6 +40,28 @@ export const MidiPortsSelect = observer(() => {
                     {Object.entries(midi.outputs).map(([id, port]) => <option key={id} value={port.id}>{port.name}</option>)}
                 </select>
             </div>
+
+            <div>
+                Channel:
+                <select value={midi.channel} onChange={(e) => midi.setChannel(parseInt(e.target.value,10))}>
+                    <option value={0}>1</option>
+                    <option value={1}>2</option>
+                    <option value={2}>3</option>
+                    <option value={3}>4</option>
+                    <option value={4}>5</option>
+                    <option value={5}>6</option>
+                    <option value={6}>7</option>
+                    <option value={7}>8</option>
+                    <option value={8}>9</option>
+                    <option value={9}>10</option>
+                    <option value={10}>11</option>
+                    <option value={11}>12</option>
+                    <option value={12}>13</option>
+                    <option value={13}>14</option>
+                    <option value={14}>15</option>
+                    <option value={15}>16</option>
+                </select>
+            </div>
         </div>
     );
 

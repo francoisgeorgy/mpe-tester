@@ -7,6 +7,16 @@ const ROOTS = [
     108, 120
 ];
 
+/**
+ * C = 0
+ * @param note with C=0
+ * @param octave starts at -1
+ */
+export function noteNumber(note: number, octave: number) {
+    console.log(`noteNumber(${note}, ${octave}) = ${note + (octave + 1) * 12}`);
+    return note + (octave + 1) * 12;
+}
+
 export function num(noteName: string) {
     //TODO: if no octave, add octave 4 (arbitrary choice based on the choice we made to have middle C = C4)
     return NOTE_NAME.indexOf(noteName);

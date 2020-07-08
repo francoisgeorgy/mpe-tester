@@ -1,8 +1,11 @@
 import React from 'react';
 import {MidiPortsSelect} from "./components/MidiPortsSelect";
 import {Panel} from "./components/Panel";
-import './App.css';
 import {PitchBend} from "./components/PitchBend";
+import {Drone} from "./components/Drone";
+import './App.css';
+import {Timbre} from "./components/Timbre";
+import {Pressure} from "./components/Pressure";
 
 function App() {
 
@@ -16,7 +19,16 @@ function App() {
                     <MidiPortsSelect/>
                 </Panel>
                 <Panel>
+                    <Drone/>
+                </Panel>
+                <Panel>
                     <PitchBend/>
+                </Panel>
+                <Panel>
+                    <Timbre/>
+                </Panel>
+                <Panel>
+                    <Pressure/>
                 </Panel>
             </main>
         </div>
