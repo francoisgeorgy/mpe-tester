@@ -5,8 +5,10 @@ import React from "react";
 export const Panic = observer(() => {
 
     function allNotesOff() {
-        for(let i=0; i<128; i++) {
-            midi.noteOff(i, 127);
+        for (let i=0; i<128; i++) {
+            for (let ch=0; ch<16; ch++) {
+                midi.noteOff(i, 127, ch);
+            }
         }
         if (state.voices) {
             state.voices.forEach((voice, i) => {

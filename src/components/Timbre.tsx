@@ -6,7 +6,7 @@ import {ChannelProps} from "../stores/StateStore";
 export const Timbre = observer(({channel}: ChannelProps) => {
 
     const { midiStore: midi, stateStore: state } = useStores();
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(63);
 
     const updateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v: number = parseInt(e.target.value, 10);             //TODO: check that v != NaN

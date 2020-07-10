@@ -16,7 +16,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
         if (!isNaN((v))) {
             if (voice.drone.playing) {
                 midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
-                midi.noteOn(noteNumber(v, voice.drone.octave), 127, voice.channel);
+                midi.noteOn(noteNumber(v, voice.drone.octave), 1, voice.channel);
             }
             voice.drone.note = v;
         }
@@ -28,7 +28,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
         if (!isNaN((v))) {
             if (voice.drone.playing) {
                 midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
-                midi.noteOn(noteNumber(voice.drone.note, v), 127, voice.channel);
+                midi.noteOn(noteNumber(voice.drone.note, v), 1, voice.channel);
             }
             voice.drone.octave = v;
         }
@@ -39,7 +39,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
             midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
             voice.drone.playing = false;
         } else {
-            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), 1, voice.channel);
             voice.drone.playing = true;
         }
     };
