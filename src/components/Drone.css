@@ -1,0 +1,11 @@
+.drone label {
+    font-weight: bold;
+}
+
+.drone-setup {
+    margin-top: 10px;
+}
+
+.drone-setup > div {
+    margin: 5px 0 0 0;
+}

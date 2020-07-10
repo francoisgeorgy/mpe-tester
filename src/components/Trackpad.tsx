@@ -2,8 +2,9 @@ import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React, {useState} from "react";
 import {CC} from "../utils/midiCCs";
+import {ChannelProps, VoiceProps} from "../stores/StateStore";
 
-export const Trackpad = observer(() => {
+export const Trackpad = observer(({channel}: ChannelProps) => {
 
     const { midiStore: midi } = useStores();
     const [x, setX] = useState(63);

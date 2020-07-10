@@ -4,7 +4,7 @@ import {
     MIDI_VOICE_CONTROL_CHANGE,
     MIDI_VOICE_NOTE_OFF,
     MIDI_VOICE_NOTE_ON,
-    MIDI_VOICE_PITCH_BEND_CHANGE,
+    MIDI_VOICE_PITCH_BEND_CHANGE, MIDI_VOICE_POLYPHONIC_KEY_PRESSURE,
     OutMessage
 } from "../utils/midi";
 
@@ -49,8 +49,6 @@ class MidiStore {
     // subscribers: InterfaceSubscriber[];     // called when an input is set in use
     listeners: PortListener[] = [];
 
-    channel = 0;
-
     constructor() {
         // console.log("MidiStore constructor");
         // this.rootStore = rootStore;
@@ -60,15 +58,7 @@ class MidiStore {
         this.onStateChange = this.onStateChange.bind(this);     // very important
         this.onMidiMessage = this.onMidiMessage.bind(this);     // very important
         this.requestMidi(); //.then(r => console.log(r));
-
-        this.channel = 0;
-    }
-
-    setChannel(channel: number) {
-        // if (channel === 'all') {
-        //     // TODO
-        // }
-        this.channel = channel;
+        // this.channel = 0;
     }
 
     autoSelect(name: RegExp) {
@@ -127,13 +117,12 @@ class MidiStore {
         }
     */
 
-
     send(messages: OutMessage) {
         if (!this.outputInUse) return;
         this.outputInUse.send(messages);
     }
 
-    sendCC(controller: number, value: number, channel: number = this.channel): void {
+    sendCC(controller: number, value: number, channel: number = 0): void {
 
         // const port = this.outputById(this.outputInUseId);
         // if (!port) return;
@@ -151,7 +140,7 @@ class MidiStore {
     }
 
     // channel is 0..15
-    sendNRPN(MSB: number, LSB: number, value: number, channel: number = this.channel): void {
+    sendNRPN(MSB: number, LSB: number, value: number, channel: number = 0): void {
 
         // console.log("midi.sendNRPN");
 
@@ -170,14 +159,22 @@ class MidiStore {
         this.sendCC(100, 127, channel);
     }
 
-    channelPressure(value: number, channel: number = this.channel): void {
+    channelPressure(value: number, channel: number = 0): void {
         this.send([
             MIDI_VOICE_CHANNEL_PRESSURE + channel,
             value & 0x7f,
         ]);
     }
 
-    pitchBend(value: number, channel: number = this.channel): void {
+    polyPressure(note: number, value: number, channel: number = 0): void {
+        this.send([
+            MIDI_VOICE_POLYPHONIC_KEY_PRESSURE + channel,
+            note & 0x7f,
+            value & 0x7f,
+        ]);
+    }
+
+    pitchBend(value: number, channel: number = 0): void {
         if (value < 0) value = value + 8192;
         const msb = (value & 0b0011111110000000) >> 7;
         const lsb = value & 0b0000000001111111;
@@ -193,7 +190,7 @@ class MidiStore {
         ]);
     }
 
-    noteOn(note: number, velocity= 127, channel = this.channel) {
+    noteOn(note: number, velocity= 127, channel = 0) {
         this.send([
             MIDI_VOICE_NOTE_ON + channel,
             note & 0x7f,
@@ -201,7 +198,7 @@ class MidiStore {
         ]);
     }
 
-    noteOff(note: number, releaseVelocity = 127, channel = this.channel) {
+    noteOff(note: number, releaseVelocity = 127, channel = 0) {
         this.send([
             MIDI_VOICE_NOTE_OFF + channel,
             note & 0x7f,
@@ -486,11 +483,7 @@ decorate(MidiStore, {
     inputs: observable,
     outputs: observable,
     inputInUseId: observable,
-    outputInUseId: observable,
-    channel: observable
-    // setConnection: action,
-    // ins: computed   //,
-    // outs: computed
+    outputInUseId: observable
 });
 
 export default new MidiStore();

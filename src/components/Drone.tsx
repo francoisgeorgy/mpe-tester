@@ -1,86 +1,82 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
-import React, {FormEvent, useState} from "react";
+import React from "react";
 import {NOTE_NAME_NO_OCTAVE} from "../utils/midiNotes";
 import {noteNumber} from "../utils/midiMaths";
+import {VoiceProps} from "../stores/StateStore";
+import "./Drone.css";
 
-export const Drone = observer(() => {
-
-    // console.log("PitchBend.render");
+export const Drone = observer(({voice}: VoiceProps) => {
 
     const { midiStore: midi } = useStores();
 
-    const [note, setNote] = useState(0);
-    const [octave, setOctave] = useState(3);
-    const [playing, setPlaying] = useState(false);
+    const changeNote = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        console.log("changeNote");
+        const v = parseInt(e.target.value, 10);
+        if (!isNaN((v))) {
+            if (voice.drone.playing) {
+                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+                midi.noteOn(noteNumber(v, voice.drone.octave), 127, voice.channel);
+            }
+            voice.drone.note = v;
+        }
+    };
+
+    const changeOctave = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        console.log("changeOctave");
+        const v = parseInt(e.target.value, 10);
+        if (!isNaN((v))) {
+            if (voice.drone.playing) {
+                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+                midi.noteOn(noteNumber(voice.drone.note, v), 127, voice.channel);
+            }
+            voice.drone.octave = v;
+        }
+    };
 
     const toggleDrone = () => {
-        if (playing) {
-            midi.noteOff(noteNumber(note, octave));
-            setPlaying(false);
+        if (voice.drone.playing) {
+            midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+            voice.drone.playing = false;
         } else {
-            midi.noteOn(noteNumber(note, octave));
-            setPlaying(true);
+            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+            voice.drone.playing = true;
         }
-    }
-
-/*
-    const send = (b:number) => {
-        // if (midi) {
-            midi.send([
-                ...pitchBend(b + 8192, 0)
-            ]);
-        // }
     };
-*/
-
 
     return (
         <div className="drone">
-            <h2>Drone</h2>
-            <div>
-                You can play a drone note to help testing the MPE dimensions.
+            <div className="row">
+                <label>Note</label>
+                <div>
+                    channel {voice.channel + 1}
+                </div>
             </div>
-            <div>
-                <label>Note:</label>
-                <select value={note} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNote(parseInt(e.target.value, 10))}>
-                    {NOTE_NAME_NO_OCTAVE.map((note, index) => <option value={index} key={index}>{note}</option>)}
-                </select>
+            <div className="drone-setup">
+                <div>
+                    <select value={voice.drone.note} onChange={changeNote}>
+                        {NOTE_NAME_NO_OCTAVE.map((note, index) => <option value={index} key={index}>{note}</option>)}
+                    </select>
+                    <select value={voice.drone.octave} onChange={changeOctave}>
+                        <option value={-1}>-1</option>
+                        <option value={0}>0</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                        <option value={6}>6</option>
+                        <option value={7}>7</option>
+                        <option value={8}>8</option>
+                        <option value={9}>9</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="button" className={`play-button ${voice.drone.playing ? "playing" : ""}`} onClick={toggleDrone}>{voice.drone.playing ? "STOP ⏹️" : "PLAY ▶"}</button>
+                </div>
 
-                <label>Octave:</label>
-                <select value={octave} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOctave(parseInt(e.target.value, 10))}>
-                    <option value={-1}>-1</option>
-                    <option value={0}>0</option>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                    <option value={7}>7</option>
-                    <option value={8}>8</option>
-                    <option value={9}>9</option>
-                </select>
-
-                <button type="button" onClick={toggleDrone}>{playing ? "STOP ⏹️" : "PLAY ▶"}</button>
             </div>
         </div>
     );
-
-    //-------------------------------------------------------------------------
-
-    /*
-        function handleInSelection(e: FormEvent<HTMLSelectElement>) {
-            e.preventDefault();
-            const v = (e.target as HTMLSelectElement).value;
-            midi.useInput(v);
-        }
-    */
-
-    function handleOutSelection(e: FormEvent<HTMLSelectElement>) {
-        // e.preventDefault();
-        // const v = (e.target as HTMLSelectElement).value;
-        // midi.useOutput(v);
-    }
 
 });

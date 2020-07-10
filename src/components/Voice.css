@@ -1,0 +1,44 @@
+.voice {
+    margin: 10px 0;
+    /*border-bottom: 1px solid #aaa;*/
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 150px 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    /*background-color: #f8f8ff;*/
+}
+
+.voice-drone {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+}
+
+.voice-pitch-bend {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+}
+
+.voice-timbre {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+.voice-pressure {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}
+
+.voice h2 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.voice input[type="range"] {
+    width: 100%;
+}
+
+.raw-value {
+    width: 40px;
+}

@@ -8,42 +8,113 @@ body {
     color: #000;
 }
 
+h2 {
+    margin: 10px 0 5px 0;
+}
+h3 {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
 .app {
     /*margin: 10px;*/
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/*
 .header {
     display: flex;
     align-items: baseline;
-    margin: 0 0 20px 0;
-    border-bottom: 1px solid #ccd;
-    !*padding-bottom: 10px;*!
+    /*margin: 0 0 20px 0;*/
+    /*border-bottom: 1px solid #ccd;*/
     background-color: #fff;
-    padding: 20px;
+    padding: 10px 0;
 }
-*/
 
-header a {
+.header a {
     text-decoration: none;
+}
+
+.panic {
+    margin-left: 20px!important;
+}
+
+.panic button {
+    background-color: #ffc688;
+}
+
+.playing {
+    background-color: #ffc688;
+}
+
+.border-bottom {
+    /*padding: 10px;*/
+    border-bottom: 1px solid #ccd;
+}
+
+.config {
+    display: flex;
+}
+
+.config label {
+    font-weight: bold;
+}
+
+.config > div {
+    margin-right: 15px;
+}
+
+.config > div:last-child {
+    margin-right: 0;
+}
+
+.help p {
+    margin: 0;
+    line-height: 150%;
+}
+
+.custom-range {
+    width: 50px;
+}
+
+.play-button {
+    margin-top: 5px;
+    height: 30px;
+}
+
+.help {
+    /*border-top: 1px solid #aaa;*/
+    color: #333;
+    margin-top: 20px;
+    font-size: 0.75rem;
+}
+
+ol {
+    margin: 0 0 10px 0;
+    padding: 0 20px;
+}
+
+ul {
+    margin: 0 0 10px 0;
+    padding: 0 20px;
+}
+
+li {
+    margin: 5px 0;
 }
 
 .trackpad {
     width: 400px;
 }
 
-/*
 .header > div {
     margin-left: 10px;
-
     display: flex;
     align-items: center;
 }
 
 .header select {
-    margin: 0 10px 0 5px;
+    margin: 0 5px 0 5px;
 }
 
 .header select:first-child {
@@ -53,12 +124,13 @@ header a {
 .header > div:first-child {
     margin-left: 0;
 }
-*/
 
 .footer {
     margin: 30px 0 0 0;
-    padding: 20px;
+    padding: 5px 0 20px 0;
     border-top: 1px solid #bbb;
+    font-size: 0.75rem;
+    color: #777;
 }
 
 .about {
@@ -82,6 +154,7 @@ header a {
 .row {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .row > div {
@@ -92,20 +165,16 @@ header a {
     margin-left: 0;
 }
 
+.row-center {
+    align-items: center;
+}
+
 .col {
     flex-direction: column;
 }
 
 .col-rev {
     flex-direction: column-reverse;
-}
-
-header label {
-    margin: 0 5px 0 10px;
-}
-
-input[type=radio] {
-    margin: 0;
 }
 
 .warning {
@@ -132,13 +201,12 @@ input[type=radio] {
     background-color: white;
 }
 
-button.fit {
-    padding: 0 6px;
+.button-small {
+    padding: 0 8px;
 }
 
-.help {
-    margin-top: 5px;
-    font-size: 0.75rem;
+.sm {
+    font-size: small;
 }
 
 .f {
@@ -149,6 +217,16 @@ button.fit {
 
 .fg {
     flex-grow: 1;
+}
+
+.ar {
+    text-align: right;
+    justify-items: right;
+    justify-content: flex-end;
+}
+
+.fend {
+    justify-content: flex-end;
 }
 
 .bold {
@@ -166,16 +244,3 @@ button.fit {
 .float-right {
     float: right;
 }
-
-.pitch-bend input[type="range"] {
-    width: 80%;
-}
-
-.timbre input[type="range"] {
-    width: 40%;
-}
-
-.pressure input[type="range"] {
-    width: 40%;
-}
-

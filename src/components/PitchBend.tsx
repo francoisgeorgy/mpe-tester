@@ -1,97 +1,59 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
-import React, {FormEvent, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {ChannelProps} from "../stores/StateStore";
 
-export const PitchBend = observer(() => {
+export const PitchBend = observer(({channel}: ChannelProps) => {
 
-    // console.log("PitchBend.render");
-
-    const { midiStore: midi } = useStores();
-
-    const [bendSelect, setBendSelect] = useState("48");
-    const [bendCustom, setBendCustom] = useState("");
+    const { midiStore: midi, stateStore: state } = useStores();
     const [bend, setBend] = useState(0);
+    const [autoReset, setAutoReset] = useState(true);
 
-    const send = (b:number) => {
-        // if (midi) {
-        midi.pitchBend(b + 8192);
-            // midi.send([
-            //     ...pitchBend(b + 8192, 0)
-            // ]);
-        // }
-    };
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (autoReset) setBend(0);
+        }, 500);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [bend, autoReset]);
 
     const updateBend = (e: React.ChangeEvent<HTMLInputElement>) => {
         const b: number = parseInt(e.target.value, 10);             //TODO: check that b != NaN
         setBend(b);
-        send(b);
+        midi.pitchBend(b + 8192, channel);
     };
 
-    // if (!midi.interface) {
-    //     return null;
-    // }
-    // const midi_ok = true;
+    const zero = () => {
+        setBend(0);
+        midi.pitchBend(0 + 8192, channel);
+    };
 
-    let range;
-    if (bendSelect === "custom") {
-        range = parseInt(bendCustom, 10);
-    } else {
-        range = parseInt(bendSelect, 10);
-    }
+    const toggleAutoReset = () => {
+        setAutoReset(!autoReset);
+    };
 
-    let semi = (range*2) / 16383 * bend;
+    let semi = (state.bendRange * 2) / 16383 * bend;
 
     return (
         <div className="pitch-bend">
-            <h2>Pitch Bend (X)</h2>
-            <div>
-                <label>Pitch bend range:</label>
-                <select value={bendSelect} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setBendSelect(e.target.value)}>
-                    <option value="2">+/- 2</option>
-                    <option value="3">+/- 3</option>
-                    <option value="12">+/- 12</option>
-                    <option value="24">+/- 24</option>
-                    <option value="48">+/- 48</option>
-                    <option value="custom">custom</option>
-                </select> semitones
-                {bendSelect === "custom" &&
-                <input type="text" value={bendCustom} placeholder="enter custom pitch bend value"
-                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBendCustom(e.target.value)} className="space-right" />}
+            <div className="row">
+                <h2>Pitch Bend</h2>
+                <div>
+                    controller: {bend} ➜ device: {semi.toFixed(2)} semitones
+                </div>
+                <div className="fg fend row sm">
+                    <input type="checkbox" value="1" defaultChecked={autoReset} onClick={toggleAutoReset}/>auto-return to 0
+                </div>
+                {!autoReset &&
+                <div className="row">
+                    <button type="button" className="button-small" onClick={zero}>zero</button>
+                </div>}
             </div>
-            <div>
-                <input type="range" min="-8192" max="8191" value={bend} list="ticks" onChange={updateBend}/>
-                <datalist id="ticks">
-                    <option value="-8192"></option>
-                    <option value="0"></option>
-                    <option value="8191"></option>
-                </datalist>
-            </div>
-            <div>
-                Bend range: {range}
-            </div>
-            <div>
-                Bend position: {bend}
-            </div>
-            <div>
-                Bend in semitones according to range: {semi.toFixed(2)}
+            <div className="row row-center">
+                <input type="range" min="-8192" max="8191" value={bend} onChange={updateBend}/>
             </div>
         </div>
     );
-
-    //-------------------------------------------------------------------------
-
-    /*
-        function handleInSelection(e: FormEvent<HTMLSelectElement>) {
-            e.preventDefault();
-            const v = (e.target as HTMLSelectElement).value;
-            midi.useInput(v);
-        }
-    */
-
-    function handleOutSelection(e: FormEvent<HTMLSelectElement>) {
-        // e.preventDefault();
-        // const v = (e.target as HTMLSelectElement).value;
-        // midi.useOutput(v);
-    }
 
 });

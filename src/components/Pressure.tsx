@@ -1,30 +1,44 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React, {useState} from "react";
+import {CC11, CHAN_PRESS, ChannelProps, POLY_PRESS} from "../stores/StateStore";
 
-export const Pressure = observer(() => {
+export const Pressure = observer(({channel}: ChannelProps) => {
 
-    const { midiStore: midi } = useStores();
+    const { midiStore: midi, stateStore: state } = useStores();
     const [value, setValue] = useState(0);
+
+    const updateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const v: number = parseInt(e.target.value, 10);             //TODO: check that v != NaN
+        setValue(v);
+        switch (state.pressureController) {
+            case CHAN_PRESS:
+                midi.channelPressure(v, channel);
+                break;
+            case POLY_PRESS:
+                midi.polyPressure(60, v, channel);  //FIXME: get note
+                break;
+            case CC11:
+                midi.sendCC(11, v, channel);
+                break;
+            default:
+                console.warn("invalid pressureController value", state.pressureController);
+        }
+    };
 
     return (
         <div className="pressure">
-            <h2>Pressure (Z)</h2>
-            <div>
-                Pressure / Aftertouch is sent using the Channel Pressure message
+            <div className="row">
+                <h2>Pressure</h2>
+                <div>
+                    {value}
+                </div>
             </div>
             <div>
-{/*
-                CC
-                <select value={cc} onChange={e => setCC(parseInt(e.target.value))}>
-                    {[...Array(128)].map((i,j)=> <option value={j} key={j}>{j}</option>)}
-                </select>
-*/}
-                <div>
-                    <input type="range" min="0" max="127" value={value} onChange={e => setValue(parseInt(e.target.value))}/>
-                </div>
-                <div>
-                    Value: {value}
+                <div className="row row-center">
+                    {/*<div className="fg">*/}
+                        <input type="range" min="0" max="127" value={value} onChange={updateValue}/>
+                    {/*</div>*/}
                 </div>
             </div>
         </div>
