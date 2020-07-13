@@ -68,16 +68,16 @@ export const Config = observer(() => {
             <div className="row">
                 <label>Pressure:</label>
                 <select value={state.pressureController} onChange={selectPressureController}>
-                    <option value={CHAN_PRESS}>channel pressure</option>
-                    <option value={POLY_PRESS}>poly pressure</option>
-                    <option value={CC11}>CC 11</option>
+                    <option value={CHAN_PRESS}>Channel Aftertouch</option>
+                    <option value={POLY_PRESS}>Poly Aftertouch</option>
+                    <option value={CC11}>CC #11</option>
                 </select>
             </div>
 
             <div className="row">
                 <label>Timbre:</label>
                 <select value={state.timbreCC} onChange={e => state.setTimbreCC(parseInt(e.target.value))}>
-                    {CC_SHORT.map((name, number)=> <option value={number} key={number}>CC {number} {name}</option>)}
+                    {CC_SHORT.map((name, number)=> <option value={number} key={number}>CC {number} ({name})</option>)}
                 </select>
             </div>
 

@@ -6,7 +6,7 @@ import {CC11, CHAN_PRESS, ChannelProps, POLY_PRESS} from "../stores/StateStore";
 export const Pressure = observer(({channel}: ChannelProps) => {
 
     const { midiStore: midi, stateStore: state } = useStores();
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(100);
 
     const updateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v: number = parseInt(e.target.value, 10);             //TODO: check that v != NaN

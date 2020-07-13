@@ -39,7 +39,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
             midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
             voice.drone.playing = false;
         } else {
-            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), 1, voice.channel);
+            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), 100, voice.channel);
             voice.drone.playing = true;
         }
     };
