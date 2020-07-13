@@ -41,7 +41,7 @@ export const MidiPortsSelect = observer(() => {
             </div>
 */}
             <div className="config">
-                <label>MIDI Out:</label>
+                <label>MIDI output:</label>
                 <select onChange={handleOutSelection} value={midi.outputInUseId}>
                     <option value="">select MIDI output...</option>
                     {Object.entries(midi.outputs).map(([id, port]) => <option key={id} value={port.id}>{port.name}</option>)}

@@ -17,6 +17,11 @@ export interface ChannelProps {
     channel: number
 }
 
+export interface PressureProps {
+    channel: number,
+    note: number
+}
+
 export interface VoiceProps {
     voice: Voice
 }
@@ -34,6 +39,7 @@ class StateStore {
     nextAvailableChannel = 1;
     timbreCC = 74;
     bendRange = 48;
+    bendAutoReset = true;
     pressureController = CHAN_PRESS;
     // drones: MIDINote[];   // notes numbers
 
@@ -106,9 +112,11 @@ class StateStore {
         this.incChannel();
     }
 
+/*
     get voiceAvailable() {
         return true;
     }
+*/
 
     //-------------------------------------------------------------------------
 
@@ -117,11 +125,12 @@ class StateStore {
 decorate(StateStore, {
     masterChannel: observable,
     bendRange: observable,
+    bendAutoReset: observable,
     timbreCC: observable,
     pressureController: observable,
     // drones: observable,
-    voices: observable,
-    voiceAvailable: computed
+    voices: observable
+    // voiceAvailable: computed
 });
 
 export default new StateStore();

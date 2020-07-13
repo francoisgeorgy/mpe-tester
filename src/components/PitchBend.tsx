@@ -8,7 +8,7 @@ export const PitchBend = observer(({channel}: ChannelProps) => {
     const { midiStore: midi, stateStore: state } = useStores();
     const [bend, setBend] = useState(0);
     const [bendActive, setBendActive] = useState(false);
-    const [autoReset, setAutoReset] = useState(true);
+    // const [autoReset, setAutoReset] = useState(true);
 
 /*
     useEffect(() => {
@@ -27,7 +27,7 @@ export const PitchBend = observer(({channel}: ChannelProps) => {
 
     const bendEnd = () => {
         setBendActive(false);
-        if (autoReset) resetBend();
+        if (state.bendAutoReset) resetBend();
     };
 
     const updateBend = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,10 +41,12 @@ export const PitchBend = observer(({channel}: ChannelProps) => {
         midi.pitchBend(8192, channel);
     };
 
+/*
     const toggleAutoReset = () => {
         if (!autoReset) resetBend();
         setAutoReset(!autoReset);
     };
+*/
 
     let semi = (state.bendRange * 2) / 16383 * bend;
 
@@ -55,11 +57,13 @@ export const PitchBend = observer(({channel}: ChannelProps) => {
                 <div>
                     controller: {bend} ➜ device: {semi.toFixed(2)} semitones
                 </div>
+{/*
                 <div className="fg fend row sm">
                     <input type="checkbox" value="1" defaultChecked={autoReset} onClick={toggleAutoReset}/>auto-return to 0
                 </div>
-                {!autoReset &&
-                <div className="row">
+*/}
+                {!state.bendAutoReset &&
+                <div className="fg fend row">
                     <button type="button" className="button-small" onClick={resetBend}>zero</button>
                 </div>}
             </div>

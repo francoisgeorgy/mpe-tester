@@ -13,7 +13,7 @@ import "./Voice.css";
 export const Voice = observer(({voice}: VoiceProps) => {
 
     function randomColor() {
-        return Math.round(220 + Math.random() * 28);
+        return Math.round(224 + Math.random() * 24);
     }
 
     const bg = `#${randomColor().toString(16)}${randomColor().toString(16)}${randomColor().toString(16)}`;
@@ -27,7 +27,7 @@ export const Voice = observer(({voice}: VoiceProps) => {
                 <PitchBend channel={voice.channel}/>
             </div>
             <div className="voice-pressure">
-                <Pressure channel={voice.channel}/>
+                <Pressure voice={voice}/>
             </div>
             <div className="voice-timbre">
                 <Timbre channel={voice.channel}/>

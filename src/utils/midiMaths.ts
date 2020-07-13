@@ -13,7 +13,7 @@ const ROOTS = [
  * @param octave starts at -1
  */
 export function noteNumber(note: number, octave: number) {
-    console.log(`noteNumber(${note}, ${octave}) = ${note + (octave + 1) * 12}`);
+    // console.log(`noteNumber(${note}, ${octave}) = ${note + (octave + 1) * 12}`);
     return note + (octave + 1) * 12;
 }
 

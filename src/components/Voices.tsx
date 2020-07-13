@@ -9,15 +9,27 @@ export const Voices = observer(() => {
 
     if (!state.voices) return null;
 
+    const toggleAutoReset = () => {
+       // if (!autoReset) resetBend();
+        // setAutoReset(!autoReset);
+        state.bendAutoReset = !state.bendAutoReset;
+    };
+
     return (
         <Fragment>
             {state.voices.map(
                 (voice, i) => <Voice key={i} voice={voice}/>
             )}
-            {state.voiceAvailable &&
-            <div>
-                <button type="button" onClick={() => state.addVoice()}>add note</button>
-            </div>}
+            <div className="options">
+                <div>
+                    <button type="button" onClick={() => state.addVoice()}>Add note</button>
+                </div>
+                <div className="fg fend row sm">
+                    <input type="checkbox" id="autoReset" value="1"
+                           defaultChecked={state.bendAutoReset} className="pointer"
+                           onClick={toggleAutoReset}/><label htmlFor="autoReset" className="pointer">Pitch Bend auto returns to 0</label>
+                </div>
+            </div>
         </Fragment>
     );
 

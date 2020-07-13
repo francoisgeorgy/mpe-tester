@@ -14,10 +14,15 @@ export const Timbre = observer(({channel}: ChannelProps) => {
         midi.sendCC(state.timbreCC, v, channel);
     };
 
+    const reset = () =>  {
+        setValue(63);
+        midi.sendCC(state.timbreCC, 63, channel);
+    };
+
     return (
         <div className="timbre">
             <div className="row">
-                <h2>Timbre</h2>
+                <h2 onClick={reset} className="pointer" title="click to set value to 63 (middle)">Timbre</h2>
                 <div>
                     {value}
                 </div>
