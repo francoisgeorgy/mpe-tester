@@ -82,6 +82,9 @@ function App() {
                         <li>Middle C is set to C4 and is not yet configurable.</li>
                     </ul>
                 </div>
+                <div className="mpe-monitor">
+                    Check out our <a href="https://studiocode.dev/mpe-monitor/" target="_blank" rel="noopener noreferrer">MPE Monitor</a> and use it alongside this MPE Tester to view how MPE information are processed on the device's side.
+                </div>
             </main>
             <div className="footer">
                 Feedback welcome. Please use <a href="https://github.com/francoisgeorgy/mpe-tester/issues" target="_blank" rel="noopener noreferrer">github</a> or <a href="https://twitter.com/francoisgeorgy" target="_blank" rel="noopener noreferrer">twitter</a>.

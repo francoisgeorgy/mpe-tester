@@ -106,6 +106,14 @@ h3 {
     font-size: 0.75rem;
 }
 
+
+.mpe-monitor {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    padding: 5px;
+    background-color: lightyellow;
+}
+
 .pointer {
     cursor: pointer;
 }
