@@ -69,7 +69,7 @@ export const PitchBend = observer(({voice}: VoiceProps) => {
 */}
 
                 <div className="fg fend row">
-                    {!state.bendAutoReset && <button type="button" className="button-small space-right-l" onClick={resetBend}>zero</button>}
+                    <button type="button" className="button-small space-right-l" onClick={resetBend}>zero</button>
                     <button type="button" className="button-small" onClick={minBend}>min</button>
                     <button type="button" className="button-small" onClick={maxBend}>max</button>
                 </div>

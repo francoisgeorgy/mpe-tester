@@ -11,6 +11,7 @@ html {
 
 body {
     /*background-color: #eeeef2;*/
+    padding: 0 10px;
 }
 
 .warning-alpha {
@@ -152,7 +153,7 @@ li {
 }
 
 .header select {
-    margin: 0 5px 0 5px;
+    margin: 0 0 0 5px;
 }
 
 .header select:first-child {
@@ -232,6 +233,19 @@ li {
     margin-right: 15px;
 }
 
+.pl {
+    padding-left: 5px;
+}
+
+.pb5 {
+    padding-bottom: 5px;
+}
+
+.ph {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .shadow {
     box-shadow: 3px 3px 5px #ddd;
 }
@@ -274,10 +288,6 @@ li {
 
 .h15rem {
     height: 1.5rem;
-}
-
-.pb5 {
-    padding-bottom: 5px;
 }
 
 .float-right {

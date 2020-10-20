@@ -51,8 +51,8 @@ export const Config = observer(() => {
                     <option value="custom">custom</option>
                 </select>
                 {state.bendSelect === "custom" &&
-                <input type="text" value={state.bendCustom} placeholder="custom" onChange={updateCustomBendRange} className="custom-range space-right" />}
-                semitones
+                <input type="text" value={state.bendCustom} placeholder="custom" onChange={updateCustomBendRange} className="custom-range"/>}
+                <span className="pl">semitones</span>
             </div>
 
             <div className="row">
@@ -67,7 +67,7 @@ export const Config = observer(() => {
             <div className="row">
                 <label>Timbre:</label>
                 <select value={state.timbreCC} onChange={e => state.setTimbreCC(parseInt(e.target.value))}>
-                    {CC_SHORT.map((name, number)=> <option value={number} key={number}>CC {number} ({name})</option>)}
+                    {CC_SHORT.map((name, number)=> <option value={number} key={number}>CC {number}</option>)}
                 </select>
             </div>
 
