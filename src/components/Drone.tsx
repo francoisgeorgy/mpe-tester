@@ -47,10 +47,10 @@ export const Drone = observer(({voice}: VoiceProps) => {
     return (
         <div className="drone">
             <div className="row">
-                <label>Note</label>
-                <div>
-                    channel {voice.channel + 1}
-                </div>
+                <label>Channel {voice.channel + 1}</label>
+                {/*<div>*/}
+                {/*    channel {voice.channel + 1}*/}
+                {/*</div>*/}
             </div>
             <div className="drone-setup">
                 <div>

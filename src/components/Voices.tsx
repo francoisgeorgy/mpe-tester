@@ -20,14 +20,14 @@ export const Voices = observer(() => {
             {state.voices.map(
                 (voice, i) => <Voice key={i} voice={voice}/>
             )}
-            <div className="options">
+            <div className="voices-options">
                 <div>
                     <button type="button" onClick={() => state.addVoice()}>Add note</button>
                 </div>
-                <div className="fg fend row sm">
+                <div className="fg row">
                     <input type="checkbox" id="autoReset" value="1"
                            defaultChecked={state.bendAutoReset} className="pointer"
-                           onClick={toggleAutoReset}/><label htmlFor="autoReset" className="pointer">Pitch Bend auto returns to 0</label>
+                           onClick={toggleAutoReset}/> <label htmlFor="autoReset" className="pointer">Pitch Bend automatically returns to 0</label>
                 </div>
             </div>
         </Fragment>

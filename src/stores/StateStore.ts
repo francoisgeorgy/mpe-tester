@@ -126,13 +126,13 @@ class StateStore {
         if (!this.voices || this.voices.length === 0) {
             return {
                 note: 0,
-                octave: 3,
+                octave: 4,
                 playing: false
             };
         } else {
             const {note, octave} = this.voices[this.voices.length-1].drone;
             if (octave >= 5) {
-                return {note: note + 7, octave: 3, playing: false};
+                return {note: note + 7, octave: 2, playing: false};
             } else {
                 return {note, octave: octave + 1, playing: false};
             }

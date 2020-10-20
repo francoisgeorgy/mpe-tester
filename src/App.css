@@ -79,9 +79,13 @@ h3 {
     margin-right: 0;
 }
 
-.options {
+.voices-options {
     display: flex;
     justify-content: space-between;
+}
+
+.voices-options div:first-child {
+    width: 165px;
 }
 
 .help p {
@@ -106,11 +110,13 @@ h3 {
     /*font-size: 0.85rem;*/
 }
 
-
-.mpe-monitor {
+.more-infos {
     margin-top: 20px;
-    font-size: 0.75rem;
     padding: 5px;
+}
+
+.more-infos p {
+    font-size: 0.75rem;
 }
 
 .pointer {

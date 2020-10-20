@@ -82,8 +82,13 @@ function App() {
                         <li>Middle C is set to C4 and is not yet configurable.</li>
                     </ul>
                 </div>
-                <div className="mpe-monitor">
-                    Check out our <a href="https://studiocode.dev/mpe-monitor/" target="_blank" rel="noopener noreferrer">MPE Monitor</a> to view how MPE information are processed on the device's side.
+                <div className="more-infos">
+                    <p>
+                        Check out our <a href="https://studiocode.dev/mpe-monitor/" target="_blank" rel="noopener noreferrer">MPE Monitor</a> to view how MPE information are processed on the device's side.
+                    </p>
+                    <p>
+                        <a href="https://studiocode.dev/resources/mpe/" target="_blank" rel="noopener noreferrer">More infos about MPE</a>.
+                    </p>
                 </div>
             </main>
 {/*
