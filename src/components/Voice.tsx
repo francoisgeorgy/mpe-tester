@@ -24,13 +24,13 @@ export const Voice = observer(({voice}: VoiceProps) => {
                 <Drone voice={voice}/>
             </div>
             <div className="voice-pitch-bend">
-                <PitchBend channel={voice.channel}/>
+                <PitchBend voice={voice}/>
             </div>
             <div className="voice-pressure">
                 <Pressure voice={voice}/>
             </div>
             <div className="voice-timbre">
-                <Timbre channel={voice.channel}/>
+                <Timbre voice={voice}/>
             </div>
         </div>
     );

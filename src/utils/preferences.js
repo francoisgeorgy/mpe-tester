@@ -1,6 +1,7 @@
 import store from "storejs";
+import {CHAN_PRESS} from "../stores/StateStore";
 
-export const LOCAL_STORAGE_KEY = "studiocode.learnstrument.preferences";
+export const LOCAL_STORAGE_KEY = "studiocode.mpe-tester-1.preferences";
 
 export const DAY_THEME = 'day';
 export const NIGHT_THEME = 'night';
@@ -10,10 +11,13 @@ let preferences = {
     theme: DEFAULT_THEME,
     midi_channel: 1,
     input_id: null,      // web midi port ID
-    output_id: null      // web midi port ID
+    output_id: null,     // web midi port ID
+    bend_select: "48",
+    bend_custom: "",
+    timbre_cc: 74,   // must be number
+    z_cc_type: CHAN_PRESS,
+    master_channel: 1
 };
-
-// TODO: preferred octave, preferred middle-C, preferred shape, colors, ...
 
 export function loadPreferences() {
     const s = store.get(LOCAL_STORAGE_KEY);

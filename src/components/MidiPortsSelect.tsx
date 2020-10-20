@@ -11,7 +11,8 @@ export const MidiPortsSelect = observer(() => {
     function handleOutSelection(e: FormEvent<HTMLSelectElement>) {
         e.preventDefault();
         const v = (e.target as HTMLSelectElement).value;
-        midi.useOutput(v);
+        const p = midi.outputById(v);
+        if (p) midi.useOutput(p);
     }
 
     // const { stateStore: state, midiStore: midi } = useStores();

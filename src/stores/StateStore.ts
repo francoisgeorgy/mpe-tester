@@ -1,4 +1,5 @@
-import {computed, decorate, observable} from "mobx";
+import {decorate, observable} from "mobx";
+import {savePreferences} from "../utils/preferences";
 
 export const POLY_PRESS = "pp";
 export const CHAN_PRESS = "cp";
@@ -28,7 +29,10 @@ export interface VoiceProps {
 
 export type Voice = {
     channel: number,
-    drone: Drone
+    drone: Drone,
+    pressure: number,
+    timbre: number,
+    bend: number
 }
 
 // App's main state
@@ -38,6 +42,8 @@ class StateStore {
     voices: Voice[];
     nextAvailableChannel = 1;
     timbreCC = 74;
+    bendSelect = "48";
+    bendCustom = "";
     bendRange = 48;
     bendAutoReset = true;
     pressureController = CHAN_PRESS;
@@ -50,16 +56,45 @@ class StateStore {
         // this.drones = [];
     } // constructor
 
+
     setBendRange(range: number) {
         this.bendRange = range;
     }
 
+    setBendSelect(s: string) {
+        this.bendSelect = s;
+        if (s !== "custom") {
+            const v: number = parseInt(s, 10);
+            if (!isNaN(v)) {
+                this.setBendRange(v);
+            }
+        }
+        savePreferences({bend_select: s});
+    }
+
+    setBendCustom(s: string) {
+        this.bendCustom = s;
+        if (s) {
+            const v: number = parseInt(s, 10);
+            if (!isNaN(v)) {
+                this.setBendRange(v);
+                savePreferences({bend_custom: s});
+            }
+        }
+    }
+
+    // setBendRange(range: number) {
+    //     this.bendRange = range;
+    // }
+
     setTimbreCC(cc: number) {
         this.timbreCC = cc;
+        savePreferences({timbre_cc: cc});
     }
 
     setPressureController(ctrl: string): void {
         this.pressureController = ctrl;
+        savePreferences({z_cc_type: ctrl});
     }
 
     setMasterChannel(channel: number): void {
@@ -107,7 +142,10 @@ class StateStore {
     addVoice(): void {
         this.voices.push({
             channel: this.nextAvailableChannel,
-            drone: this.getDefaultDroneNote()
+            drone: this.getDefaultDroneNote(),
+            pressure: 100,
+            timbre: 63,
+            bend: 0
         });
         this.incChannel();
     }
@@ -124,6 +162,8 @@ class StateStore {
 
 decorate(StateStore, {
     masterChannel: observable,
+    bendSelect: observable,
+    bendCustom: observable,
     bendRange: observable,
     bendAutoReset: observable,
     timbreCC: observable,

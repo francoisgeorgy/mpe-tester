@@ -7,17 +7,18 @@ import {
     MIDI_VOICE_PITCH_BEND_CHANGE, MIDI_VOICE_POLYPHONIC_KEY_PRESSURE,
     OutMessage
 } from "../utils/midi";
-
-// import {hs} from "../utils";
+import {loadPreferences, savePreferences} from "../utils/preferences";
 
 /*
     Notes: the state of the connection (closed, open) is not tracked (observed).
 */
 
-
 // export interface PortListener {
 //     consume: (message: any) => void
 // }
+
+export const PORT_INPUT = "input";
+export const PORT_OUTPUT = "output";
 
 type PortListener = (message: WebMidi.MIDIMessageEvent) => void;
 
@@ -46,46 +47,12 @@ class MidiStore {
     outputInUseId = "";
     // inputInUse: WebMidi.MIDIInput = undefined;       // todo: really used?
     outputInUse: WebMidi.MIDIOutput | undefined;
-    // subscribers: InterfaceSubscriber[];     // called when an input is set in use
     listeners: PortListener[] = [];
 
     constructor() {
-        // console.log("MidiStore constructor");
-        // this.rootStore = rootStore;
-        // this.interface = null;
-        // this.inputs = [];     //TODO: create array instead
-        // this.outputs = [];
         this.onStateChange = this.onStateChange.bind(this);     // very important
         this.onMidiMessage = this.onMidiMessage.bind(this);     // very important
         this.requestMidi(); //.then(r => console.log(r));
-        // this.channel = 0;
-    }
-
-    autoSelect(name: RegExp) {
-
-        //TODO: unselect if null?
-
-        if (!name) return null;
-
-        if (!this.inputInUseId) {
-            for (let port of this.interface.inputs.values()) {
-                if (port.name.match(name)) {
-                    // console.log(`autoSelect input ${port.name} ${port.id}`);
-                    this.useInput(port.id);
-                    break;
-                }
-            }
-        }
-
-        if (!this.outputInUseId) {
-            for (let port of this.interface.outputs.values()) {
-                if (port.name.match(name)) {
-                    // console.log(`autoSelect output ${port.name} ${port.id}`);
-                    this.useOutput(port.id);
-                    break;
-                }
-            }
-        }
     }
 
     inputById(id: string): WebMidi.MIDIInput | null {
@@ -99,9 +66,6 @@ class MidiStore {
     }
 
     outputById(id: string): WebMidi.MIDIOutput | null {
-
-        // console.log("midi.outputById", id);
-
         if (!id) return null;
         for (let port of this.interface.outputs.values()) {
             if (port.id === id) {
@@ -111,27 +75,13 @@ class MidiStore {
         return null;
     }
 
-    /*
-        subscribe(callback: InterfaceSubscriber) {
-            this.subscribers.push(callback);
-        }
-    */
-
     send(messages: OutMessage) {
         if (!this.outputInUse) return;
         this.outputInUse.send(messages);
     }
 
     sendCC(controller: number, value: number, channel: number = 0): void {
-
-        // const port = this.outputById(this.outputInUseId);
-        // if (!port) return;
         if (!this.outputInUse) return;
-
-        // console.log("midi.sendCC", controller, value, channel);
-
-        //TODO: validate parameters
-
         this.outputInUse.send([
             MIDI_VOICE_CONTROL_CHANGE + channel,
             controller & 0x7f,
@@ -141,11 +91,6 @@ class MidiStore {
 
     // channel is 0..15
     sendNRPN(MSB: number, LSB: number, value: number, channel: number = 0): void {
-
-        // console.log("midi.sendNRPN");
-
-        //TODO: validate parameters
-
         // 1. select the NRPN
         this.sendCC(99, MSB, channel);
         this.sendCC(98, LSB, channel);
@@ -209,8 +154,6 @@ class MidiStore {
     connectInput(id: string) {
         for (let input of this.interface.inputs.values()) {
             if (input.id === id) {
-                // console.log("MidiStore.connectInput", id);  //, input.onmidimessage);
-                // this.inputInUse = input;
                 if (!input.onmidimessage) {
                     input.onmidimessage = this.onMidiMessage;
                 } else {
@@ -218,59 +161,39 @@ class MidiStore {
                 }
             }
         }
-        // console.log("connect", id, this.inputs[id].onmidimessage);
-        // if (this.inputs[id].) {)
     }
-
-
-    // callListeners() {
-    //
-    // }
 
     // use this method when you need to more than one listener
     addListener(callback: PortListener) {
-        // console.log("MidiStore.addListener");
-        // this.connect(id);
         this.listeners.push(callback);
-        // console.log("addListener listeners:", this.inputs[id].listeners);
     }
 
     useInput(id: string) {
-        // console.log("MidiStore.useInput", id);
         this.inputInUseId = id;
         this.connectInput(id);
     }
 
-/*
-    useInput(id: string, callback?: PortListener) {
-        console.log("useInput", id);
-        this.inputInUseId = id;
-
-        if (callback) {
-            this.addListener(id, callback);
-        }
-    }
-*/
-
-    useOutput(id: string, callback: any = null) {
-        // console.log("MidiStore.useOutput", id);
-        this.outputInUseId = id;
-        for (let port of this.interface.outputs.values()) {
-            if (port.id === id) {
+    useOutput(port: WebMidi.MIDIOutput, callback: any = null) {
+        this.outputInUseId = port.id;
+        for (let p of this.interface.outputs.values()) {
+            if (p.id === port.id) {
                 this.outputInUse = port;
+                savePreferences({output_id: port.id});
             }
         }
-        // if (this.outputs.hasOwnProperty(id)) {
-        //     if (exclusive) {
-        //         //TODO: remove all others inUse inputs
-        //     }
-        //     this.outputs[id].inUse = true;
-        // }
     }
 
-    updateInputsOutputs() {
+    autoConnectOutput = (port: WebMidi.MIDIOutput) => {
+        if (!port) {
+            return;
+        }
+        const s = loadPreferences();
+        if (port.id === s.output_id) {
+            this.useOutput(port);
+        }
+    };
 
-        // console.log("MidiStore.updateInputsOutputs", Object.keys(this.inputs));
+    updateInputsOutputs() {
 
         if (!this.interface) return;
 
@@ -289,10 +212,7 @@ class MidiStore {
                 }
             }
             if (remove) {
-                // console.warn("remove", id);
-
                 //TODO: remove listeners
-
                 delete(this.inputs[id]);
             }
         }
@@ -314,6 +234,7 @@ class MidiStore {
                 // inUse: false,
                 // listeners: []
             };
+
         }
 
         //
@@ -345,107 +266,21 @@ class MidiStore {
                 id: output.id,
                 name: output.name,
                 connection: output.connection,
-                // inUse: false,
-                // listeners: []   //FIXME: set listeners as optional
             };
+
+            this.autoConnectOutput(output);
         }
 
     }
 
     onMidiMessage(message: WebMidi.MIDIMessageEvent) {
-        // console.log("onMidiMessage is bound to", this);
-        // if (message instanceof WebMidi.MIDIMessageEvent) {
-
-        // let bytes = message.data;       // type is Uint8Array
-        // let channel = bytes[0] & 0x0F;  // MIDI channel
-        // // let type = bytes[0] & 0xF0;     // MIDI event type
-        // let port = message.currentTarget;
-
-        // @ts-ignore
-        // console.log(message.type + " data: [" + hs(bytes) + "] channel: " + channel + " source: " + port.name, "#messages");
-
-        // console.log(this.inputs);
-
-/*
-        Object.entries(this.inputs).forEach(
-            ([id, port]) => {
-                // console.log("call all listeners for port ", id)
-                if (port.listeners) {
-                    Object.values(port.listeners).forEach(
-                        (listener: PortListener) => {
-                            // console.log("call listener for port ", id);
-                            listener(message);
-                        }
-                    );
-                }
-            }
-        );
-*/
-
-/*
-        for (let input of this.interface.inputs.values()) {    // midi interface list of inputs
-            // console.log("check", id, input.id, input.type, input.name, input.state, input.connection);
-            if (input.id === this.inputInUseId) {
-                for (let listener of this.listeners) {
-                    // console.log("call listener for port ", id);
-                    listener(message);
-                }
-                break;
-            }
-        }
-*/
         for (let listener of this.listeners) {
-            // console.log("call listener for port ", id);
             listener(message);
         }
-
-        // Object.entries(this.inputs).forEach(
-        //     ([id, port]) => {
-        //         // console.log("call all listeners for port ", id)
-        //         if (port.listeners) {
-        //             Object.values(port.listeners).forEach(
-        //                 (listener: PortListener) => {
-        //                     // console.log("call listener for port ", id);
-        //                     listener(message);
-        //                 }
-        //             );
-        //         }
-        //     }
-        // );
-
     }
 
     onStateChange(event: WebMidi.MIDIConnectionEvent) {
-        // console.log("onStateChange is bound to", this);
-        // console.log(`onStateChange: "${event.type}" event for ${event.port.id} ${event.port.type} ${event.port.name}, connection status is ${event.port.connection}`, "#state");
-
         this.updateInputsOutputs();
-
-/*
-        const p : WebMidi.MIDIPort = event.port;
-        if (p.state === "connected") {
-            // Handle the interface
-            if (p.type === "input") {
-                if (!(p as WebMidi.MIDIInput).onmidimessage) {
-                    (p as WebMidi.MIDIInput).onmidimessage = this.onMidiMessage;
-                    console.log(`${p.name} input listener added`, this.inputs);
-                    // this.inputs.push(p);
-                }
-            }
-        } else if (p.state === "disconnected") {
-            // Handle the disconnection
-            if (p.type === "input") {
-                if ((p as WebMidi.MIDIInput).onmidimessage) {
-                    // @ts-ignore
-                    (p as WebMidi.MIDIInput).onmidimessage = null;
-                    console.log(`${p.name} input listener removed`);
-                }
-            }
-        } else {
-            console.log(`${p.type} ${p.name} is in an unknown state: ${p.state}`);
-        }
-*/
-        // listInputsAndOutputs();
     }
 
     async requestMidi() {

@@ -38,8 +38,8 @@ export const Panic = observer(() => {
 
     return (
         <div className="panic">
-            <button type="button" className={`${playing ? "playing" : ""}`} onClick={allNotesOff}>ALL NOTES OFF</button>
-            <button type="button" onClick={panic}>PANIC</button>
+            <button type="button" className={`${playing ? "playing" : ""}`} onClick={allNotesOff} title="Stop all drone notes">ALL NOTES OFF</button>
+            <button type="button" onClick={panic} title="Send NOTE OFF messages for all notes on all channels.">PANIC</button>
         </div>
     );
 

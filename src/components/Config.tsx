@@ -1,43 +1,33 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import {CC_SHORT} from "../utils/midiCCs";
 import {CC11, CHAN_PRESS, POLY_PRESS} from "../stores/StateStore";
+import {loadPreferences} from "../utils/preferences";
 
 export const Config = observer(() => {
 
     function selectBendRange(e: React.ChangeEvent<HTMLSelectElement>) {
-        const s = e.target.value;
-        setBendSelect(s);
-        if (s !== "custom") {
-            const v: number = parseInt(s, 10);
-            if (!isNaN(v)) {
-                state.setBendRange(v);
-            }
-        }
+        state.setBendSelect(e.target.value);
     }
 
     function updateCustomBendRange(e: React.ChangeEvent<HTMLInputElement>) {
-        const s = e.target.value;
-        setBendCustom(s);
-        if (s) {
-            const v: number = parseInt(s, 10);
-            if (!isNaN(v)) {
-                state.setBendRange(v);
-            }
-        }
+        state.setBendCustom(e.target.value);
     }
 
     function selectPressureController(e: React.ChangeEvent<HTMLSelectElement>) {
-        const s = e.target.value;
-        state.setPressureController(s);
+        state.setPressureController(e.target.value);
     }
 
     const { stateStore: state } = useStores();
 
-    const [bendSelect, setBendSelect] = useState("48"); //FIXME: should be initialized with state.bendRange.toString
-    const [bendCustom, setBendCustom] = useState("");
-    // const [pressureCtrl, setPressureCtrl] = useState(state.pressureController);
+    useEffect(() => {
+        const prefs = loadPreferences();
+        state.setBendCustom(prefs.bend_custom);
+        state.setBendSelect(prefs.bend_select);
+        state.setTimbreCC(prefs.timbre_cc);
+        state.setPressureController(prefs.z_cc_type);
+    });
 
     return (
         <div className="config">
@@ -52,7 +42,7 @@ export const Config = observer(() => {
 
             <div className="row">
                 <label>Pitch Bend:</label>
-                <select value={bendSelect} onChange={selectBendRange}>
+                <select value={state.bendSelect} onChange={selectBendRange}>
                     <option value="2">+/- 2</option>
                     <option value="3">+/- 3</option>
                     <option value="12">+/- 12</option>
@@ -60,8 +50,8 @@ export const Config = observer(() => {
                     <option value="48">+/- 48</option>
                     <option value="custom">custom</option>
                 </select>
-                {bendSelect === "custom" &&
-                <input type="text" value={bendCustom} placeholder="custom" onChange={updateCustomBendRange} className="custom-range space-right" />}
+                {state.bendSelect === "custom" &&
+                <input type="text" value={state.bendCustom} placeholder="custom" onChange={updateCustomBendRange} className="custom-range space-right" />}
                 semitones
             </div>
 
@@ -82,13 +72,13 @@ export const Config = observer(() => {
             </div>
 
 {/*
-                        <div>
-                            <label>Master channel:</label>
-                            <select value={this.state.master_channel} onChange={this.setMasterChannel}>
-                                <option value="1">1</option>
-                                <option value="16">16</option>
-                            </select>
-                        </div>
+            <div>
+                <label>Master channel:</label>
+                <select value={this.state.master_channel} onChange={this.setMasterChannel}>
+                    <option value="1">1</option>
+                    <option value="16">16</option>
+                </select>
+            </div>
 */}
 
         </div>

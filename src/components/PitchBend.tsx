@@ -1,13 +1,13 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React, {useState} from "react";
-import {ChannelProps} from "../stores/StateStore";
+import {VoiceProps} from "../stores/StateStore";
 
-export const PitchBend = observer(({channel}: ChannelProps) => {
+export const PitchBend = observer(({voice}: VoiceProps) => {
 
     const { midiStore: midi, stateStore: state } = useStores();
     const [bend, setBend] = useState(0);
-    const [bendActive, setBendActive] = useState(false);
+    // const [bendActive, setBendActive] = useState(false);
     // const [autoReset, setAutoReset] = useState(true);
 
 /*
@@ -22,23 +22,23 @@ export const PitchBend = observer(({channel}: ChannelProps) => {
 */
 
     const bendStart = () => {
-        setBendActive(true);
+        // setBendActive(true);
     };
 
     const bendEnd = () => {
-        setBendActive(false);
+        // setBendActive(false);
         if (state.bendAutoReset) resetBend();
     };
 
     const updateBend = (e: React.ChangeEvent<HTMLInputElement>) => {
         const b: number = parseInt(e.target.value, 10);             //TODO: check that b != NaN
         setBend(b);
-        midi.pitchBend(b + 8192, channel);
+        midi.pitchBend(b + 8192, voice.channel);
     };
 
     const resetBend = () => {
         setBend(0);
-        midi.pitchBend(8192, channel);
+        midi.pitchBend(8192, voice.channel);
     };
 
 /*

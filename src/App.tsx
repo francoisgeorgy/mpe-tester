@@ -1,10 +1,10 @@
 import React from 'react';
 import {MidiPortsSelect} from "./components/MidiPortsSelect";
 import {Voices} from "./components/Voices";
-import { Config } from './components/Config';
+import {Config} from './components/Config';
+import {Panic} from "./components/Panic";
 import './App.css';
 import "./inputRange.css";
-import {Panic} from "./components/Panic";
 
 function App() {
 
@@ -15,8 +15,8 @@ function App() {
                 <MidiPortsSelect/>
                 <Panic/>
                 <div className="about">
-                    <span className="bold">MPE Tester {process.env.REACT_APP_VERSION}</span>
-                    &nbsp;by&nbsp;<a href="https://studiocode.dev" target="_blank" rel="noopener noreferrer">StudioCode.dev</a>
+                    <div className="bold">MPE Tester {process.env.REACT_APP_VERSION}</div>
+                    <div>by&nbsp;<a href="https://studiocode.dev" target="_blank" rel="noopener noreferrer">StudioCode.dev</a></div>
                 </div>
             </div>
 
@@ -83,12 +83,14 @@ function App() {
                     </ul>
                 </div>
                 <div className="mpe-monitor">
-                    Check out our <a href="https://studiocode.dev/mpe-monitor/" target="_blank" rel="noopener noreferrer">MPE Monitor</a> and use it alongside this MPE Tester to view how MPE information are processed on the device's side.
+                    Check out our <a href="https://studiocode.dev/mpe-monitor/" target="_blank" rel="noopener noreferrer">MPE Monitor</a> to view how MPE information are processed on the device's side.
                 </div>
             </main>
+{/*
             <div className="footer">
                 Feedback welcome. Please use <a href="https://github.com/francoisgeorgy/mpe-tester/issues" target="_blank" rel="noopener noreferrer">github</a> or <a href="https://twitter.com/francoisgeorgy" target="_blank" rel="noopener noreferrer">twitter</a>.
             </div>
+*/}
         </div>
     );
 }
