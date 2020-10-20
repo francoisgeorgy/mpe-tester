@@ -1,6 +1,8 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
 import React from "react";
+import {MIDI_DEFAULT_NOTE_OFF_VELOCITY} from "../utils/midi";
+import {noteNumber} from "../utils/midiMaths";
 
 export const Panic = observer(() => {
 
@@ -8,7 +10,7 @@ export const Panic = observer(() => {
         if (state.voices) {
             state.voices.forEach((voice, i) => {
                 if (voice.drone) {
-                    midi.noteOff(voice.drone.note, 127, voice.channel);
+                    midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
                     voice.drone.playing = false;
                 }
             });
@@ -19,7 +21,7 @@ export const Panic = observer(() => {
         allNotesOff();
         for (let i=0; i<128; i++) {
             for (let ch=0; ch<16; ch++) {
-                midi.noteOff(i, 127, ch);
+                midi.noteOff(i, MIDI_DEFAULT_NOTE_OFF_VELOCITY, ch);
             }
         }
     }

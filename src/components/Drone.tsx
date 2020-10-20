@@ -5,30 +5,29 @@ import {NOTE_NAME_NO_OCTAVE} from "../utils/midiNotes";
 import {noteNumber} from "../utils/midiMaths";
 import {VoiceProps} from "../stores/StateStore";
 import "./Drone.css";
+import {MIDI_DEFAULT_NOTE_OFF_VELOCITY, MIDI_DEFAULT_NOTE_ON_VELOCITY} from "../utils/midi";
 
 export const Drone = observer(({voice}: VoiceProps) => {
 
     const { midiStore: midi } = useStores();
 
     const changeNote = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log("changeNote");
         const v = parseInt(e.target.value, 10);
         if (!isNaN((v))) {
             if (voice.drone.playing) {
-                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
-                midi.noteOn(noteNumber(v, voice.drone.octave), voice.pressure, voice.channel);
+                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
+                midi.noteOn(noteNumber(v, voice.drone.octave), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
             }
             voice.drone.note = v;
         }
     };
 
     const changeOctave = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log("changeOctave");
         const v = parseInt(e.target.value, 10);
         if (!isNaN((v))) {
             if (voice.drone.playing) {
-                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
-                midi.noteOn(noteNumber(voice.drone.note, v), voice.pressure, voice.channel);
+                midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
+                midi.noteOn(noteNumber(voice.drone.note, v), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
             }
             voice.drone.octave = v;
         }
@@ -36,10 +35,10 @@ export const Drone = observer(({voice}: VoiceProps) => {
 
     const toggleDrone = () => {
         if (voice.drone.playing) {
-            midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), 127, voice.channel);
+            midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
             voice.drone.playing = false;
         } else {
-            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), voice.pressure, voice.channel);
+            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
             voice.drone.playing = true;
         }
     };

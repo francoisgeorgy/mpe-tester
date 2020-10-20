@@ -10,8 +10,8 @@
 // The highest note of the piano is C8 (MIDI 108).
 
 
-export const MIDDLE_OCTAVE = 2;
-export const MIDDLE_C = 36;     // C3 is better centered than C4 on the LinnStrument
+// export const MIDDLE_OCTAVE = 2;
+// export const MIDDLE_C = 36;     // C3 is better centered than C4 on the LinnStrument
 
 export const NOTE_NAME_NO_OCTAVE = [    // index 0 must be 'C', like NOTE_NAME
     "C", // 0

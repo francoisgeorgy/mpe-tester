@@ -135,7 +135,7 @@ class MidiStore {
         ]);
     }
 
-    noteOn(note: number, velocity= 127, channel = 0) {
+    noteOn(note: number, velocity= 64, channel = 0) {
         this.send([
             MIDI_VOICE_NOTE_ON + channel,
             note & 0x7f,
@@ -143,7 +143,7 @@ class MidiStore {
         ]);
     }
 
-    noteOff(note: number, releaseVelocity = 127, channel = 0) {
+    noteOff(note: number, releaseVelocity = 64, channel = 0) {
         this.send([
             MIDI_VOICE_NOTE_OFF + channel,
             note & 0x7f,

@@ -12,7 +12,8 @@ export const Voices = observer(() => {
     const toggleAutoReset = () => {
        // if (!autoReset) resetBend();
         // setAutoReset(!autoReset);
-        state.bendAutoReset = !state.bendAutoReset;
+        // state.bendAutoReset = !state.bendAutoReset;
+        state.toggleBendAutoReset();
     };
 
     return (

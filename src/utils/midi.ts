@@ -10,6 +10,18 @@ export const MIDI_VOICE_PROGRAM_CHANGE = 0xC0;
 export const MIDI_VOICE_CHANNEL_PRESSURE = 0xD0;
 export const MIDI_VOICE_PITCH_BEND_CHANGE = 0xE0;
 
+export const MIDI_DEFAULT_NOTE_ON_VELOCITY = 64;
+export const MIDI_DEFAULT_NOTE_OFF_VELOCITY = 64;
+
+export const MIDI_DEFAULT_NOTE = 0;    // C3
+export const MIDI_DEFAULT_OCTAVE = 3;    // C3
+export const MIDI_DEFAULT_NOTE_NUMBER = 48;    // C3
+export const MIDI_MAX_NOTE_NUMBER = 95;    // B6
+
+export const MIDI_DEFAULT_PRESSURE = 63;
+export const MIDI_DEFAULT_TIMBRE = 63;
+
+
 export const MIDI_MSG_TYPE: {[key: number]: string} = {
     [MIDI_VOICE_NOTE_ON]: "Note ON",
     [MIDI_VOICE_NOTE_OFF]: "Note Off",

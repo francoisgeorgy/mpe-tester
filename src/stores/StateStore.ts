@@ -1,5 +1,13 @@
 import {decorate, observable} from "mobx";
 import {savePreferences} from "../utils/preferences";
+import {
+    MIDI_DEFAULT_NOTE, MIDI_DEFAULT_NOTE_NUMBER,
+    MIDI_DEFAULT_OCTAVE,
+    MIDI_DEFAULT_PRESSURE,
+    MIDI_DEFAULT_TIMBRE,
+    MIDI_MAX_NOTE_NUMBER
+} from "../utils/midi";
+import {noteNumber} from "../utils/midiMaths";
 
 export const POLY_PRESS = "pp";
 export const CHAN_PRESS = "cp";
@@ -49,13 +57,14 @@ class StateStore {
     pressureController = CHAN_PRESS;
     // drones: MIDINote[];   // notes numbers
 
+    nextInterval = 0;   // when adding drone notes, add with maj thirds
+
     constructor() {
         this.nextAvailableChannel = 1;
         this.voices = [];
         this.addVoice();
         // this.drones = [];
     } // constructor
-
 
     setBendRange(range: number) {
         this.bendRange = range;
@@ -113,6 +122,19 @@ class StateStore {
         });
     }
 
+    resetBend() {
+        console.log("resetBend");
+        this.voices.forEach((voice, i) => {
+            voice.bend = 0;
+        });
+    }
+
+    toggleBendAutoReset() {
+        console.log("toggleBendAutoReset");
+        this.bendAutoReset = !this.bendAutoReset;
+        if (this.bendAutoReset) this.resetBend();
+    }
+
     incChannel(): void {
         const c = this.nextAvailableChannel;
         if (this.masterChannel === 0) {
@@ -125,17 +147,31 @@ class StateStore {
     getDefaultDroneNote(): Drone {
         if (!this.voices || this.voices.length === 0) {
             return {
-                note: 0,
-                octave: 4,
+                note: MIDI_DEFAULT_NOTE,
+                octave: MIDI_DEFAULT_OCTAVE,
                 playing: false
             };
         } else {
-            const {note, octave} = this.voices[this.voices.length-1].drone;
-            if (octave >= 5) {
-                return {note: note + 7, octave: 2, playing: false};
-            } else {
-                return {note, octave: octave + 1, playing: false};
+
+            // intervals in thirds: 4 --> 3 --> 5 --> 4 --> 3 ...
+            switch (this.nextInterval) {
+                case 0 : this.nextInterval = 4; break;
+                case 4 : this.nextInterval = 3; break;
+                case 3 : this.nextInterval = 5; break;
+                case 5 : this.nextInterval = 4; break;
             }
+
+            const {note, octave} = this.voices[this.voices.length-1].drone;
+            let t = noteNumber(note, octave) + this.nextInterval;
+            if (t > MIDI_MAX_NOTE_NUMBER) {
+                t = MIDI_DEFAULT_NOTE_NUMBER - 24;
+            }
+
+            return {
+                note: t % 12,
+                octave: Math.floor(t / 12) - 1,
+                playing: false
+            };
         }
     }
 
@@ -143,8 +179,8 @@ class StateStore {
         this.voices.push({
             channel: this.nextAvailableChannel,
             drone: this.getDefaultDroneNote(),
-            pressure: 100,
-            timbre: 63,
+            pressure: MIDI_DEFAULT_PRESSURE,
+            timbre: MIDI_DEFAULT_TIMBRE,
             bend: 0
         });
         this.incChannel();
