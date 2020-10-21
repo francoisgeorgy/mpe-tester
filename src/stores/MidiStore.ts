@@ -164,23 +164,36 @@ class MidiStore {
     }
 
     // use this method when you need to more than one listener
-    addListener(callback: PortListener) {
-        this.listeners.push(callback);
-    }
+    // addListener(callback: PortListener) {
+    //     this.listeners.push(callback);
+    // }
+    //
+    // useInput(id: string) {
+    //     this.inputInUseId = id;
+    //     this.connectInput(id);
+    // }
 
-    useInput(id: string) {
-        this.inputInUseId = id;
-        this.connectInput(id);
-    }
+    // useOutput(port: WebMidi.MIDIOutput, callback: any = null) {
+    //     this.outputInUseId = port.id;
+    //     for (let p of this.interface.outputs.values()) {
+    //         if (p.id === port.id) {
+    //             this.outputInUse = port;
+    //             savePreferences({output_id: port.id});
+    //         }
+    //     }
+    // }
 
-    useOutput(port: WebMidi.MIDIOutput, callback: any = null) {
-        this.outputInUseId = port.id;
+    useOutputById(id: string) {
+        this.outputInUseId = id;
+        // const p = this.outputById(id);
+        // if (p) midi.useOutput(p);
+        // this.outputInUseId = port.id;
         for (let p of this.interface.outputs.values()) {
-            if (p.id === port.id) {
-                this.outputInUse = port;
-                savePreferences({output_id: port.id});
+            if (p.id === id) {
+                this.outputInUse = p;
             }
         }
+        savePreferences({output_id: id});
     }
 
     autoConnectOutput = (port: WebMidi.MIDIOutput) => {
@@ -189,7 +202,7 @@ class MidiStore {
         }
         const s = loadPreferences();
         if (port.id === s.output_id) {
-            this.useOutput(port);
+            this.useOutputById(port.id);
         }
     };
 
