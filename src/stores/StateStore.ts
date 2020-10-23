@@ -1,7 +1,7 @@
 import {decorate, observable} from "mobx";
 import {savePreferences} from "../utils/preferences";
 import {
-    MIDI_DEFAULT_NOTE, MIDI_DEFAULT_NOTE_NUMBER,
+    MIDI_DEFAULT_NOTE, MIDI_DEFAULT_NOTE_NUMBER, MIDI_DEFAULT_NOTE_ON_VELOCITY,
     MIDI_DEFAULT_OCTAVE,
     MIDI_DEFAULT_PRESSURE,
     MIDI_DEFAULT_TIMBRE,
@@ -15,7 +15,8 @@ export const CC11 = "cc11";
 
 export type MIDINote = {
     note: number,
-    octave: number
+    octave: number,
+    velocity: number
 };
 
 export type Drone = MIDINote & {
@@ -149,6 +150,7 @@ class StateStore {
             return {
                 note: MIDI_DEFAULT_NOTE,
                 octave: MIDI_DEFAULT_OCTAVE,
+                velocity: MIDI_DEFAULT_NOTE_ON_VELOCITY,
                 playing: false
             };
         } else {
@@ -170,6 +172,7 @@ class StateStore {
             return {
                 note: t % 12,
                 octave: Math.floor(t / 12) - 1,
+                velocity: MIDI_DEFAULT_NOTE_ON_VELOCITY,
                 playing: false
             };
         }

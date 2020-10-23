@@ -16,7 +16,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
         if (!isNaN((v))) {
             if (voice.drone.playing) {
                 midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
-                midi.noteOn(noteNumber(v, voice.drone.octave), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
+                midi.noteOn(noteNumber(v, voice.drone.octave), voice.drone.velocity, voice.channel);
             }
             voice.drone.note = v;
         }
@@ -27,9 +27,20 @@ export const Drone = observer(({voice}: VoiceProps) => {
         if (!isNaN((v))) {
             if (voice.drone.playing) {
                 midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
-                midi.noteOn(noteNumber(voice.drone.note, v), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
+                midi.noteOn(noteNumber(voice.drone.note, v), voice.drone.velocity, voice.channel);
             }
             voice.drone.octave = v;
+        }
+    };
+
+    const changeVelocity = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const v = parseInt(e.target.value, 10);
+        if (!isNaN((v))) {
+            // if (voice.drone.playing) {
+            //     midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
+            //     midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), v, voice.channel);
+            // }
+            voice.drone.velocity = v;
         }
     };
 
@@ -38,7 +49,7 @@ export const Drone = observer(({voice}: VoiceProps) => {
             midi.noteOff(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_OFF_VELOCITY, voice.channel);
             voice.drone.playing = false;
         } else {
-            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), MIDI_DEFAULT_NOTE_ON_VELOCITY, voice.channel);
+            midi.noteOn(noteNumber(voice.drone.note, voice.drone.octave), voice.drone.velocity, voice.channel);
             voice.drone.playing = true;
         }
     };
@@ -53,6 +64,9 @@ export const Drone = observer(({voice}: VoiceProps) => {
             </div>
             <div className="drone-setup">
                 <div>
+                    <div className="drone-labels">
+                        note, octave, velocity
+                    </div>
                     <select value={voice.drone.note} onChange={changeNote}>
                         {NOTE_NAME_NO_OCTAVE.map((note, index) => <option value={index} key={index}>{note}</option>)}
                     </select>
@@ -68,6 +82,11 @@ export const Drone = observer(({voice}: VoiceProps) => {
                         <option value={7}>7</option>
                         <option value={8}>8</option>
                         <option value={9}>9</option>
+                    </select>
+                    <select value={voice.drone.velocity} onChange={changeVelocity}>
+                    {[...Array(128)].map((i,j)=>
+                        <option value={j}>{j}</option>
+                    )}
                     </select>
                 </div>
                 <div>

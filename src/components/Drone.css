@@ -3,7 +3,7 @@
 }
 
 .drone-setup {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .drone-setup > div {
@@ -12,4 +12,10 @@
 
 .drone-setup select {
     font-size: 1rem;
+}
+
+.drone-labels {
+    font-size: 0.85rem;
+    margin-bottom: 3px;
+    color: #555;
 }
