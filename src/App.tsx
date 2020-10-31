@@ -5,11 +5,14 @@ import {Config} from './components/Config';
 import {Panic} from "./components/Panic";
 import './App.css';
 import "./inputRange.css";
+import {MidiSupportWarning} from "./components/MidiSupportWarning";
 
 function App() {
 
     return (
         <div className="app">
+
+            <MidiSupportWarning />
 
             <div className="header">
                 <MidiPortsSelect/>
