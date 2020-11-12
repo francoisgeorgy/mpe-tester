@@ -5,7 +5,9 @@ import {NOTE_NAME_NO_OCTAVE} from "../utils/midiNotes";
 import {noteNumber} from "../utils/midiMaths";
 import {VoiceProps} from "../stores/StateStore";
 import "./Drone.css";
-import {MIDI_DEFAULT_NOTE_OFF_VELOCITY, MIDI_DEFAULT_NOTE_ON_VELOCITY} from "../utils/midi";
+import {MIDI_DEFAULT_NOTE_OFF_VELOCITY} from "../utils/midi";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlay, faStop} from "@fortawesome/free-solid-svg-icons";
 
 export const Drone = observer(({voice}: VoiceProps) => {
 
@@ -85,12 +87,14 @@ export const Drone = observer(({voice}: VoiceProps) => {
                     </select>
                     <select value={voice.drone.velocity} onChange={changeVelocity}>
                     {[...Array(128)].map((i,j)=>
-                        <option value={j}>{j}</option>
+                        <option key={j} value={j}>{j}</option>
                     )}
                     </select>
                 </div>
                 <div>
-                    <button type="button" className={`play-button ${voice.drone.playing ? "playing" : ""}`} onClick={toggleDrone}>{voice.drone.playing ? "STOP️" : "PLAY"}</button>
+                    {/*<button type="button" className={`play-button ${voice.drone.playing ? "playing" : ""}`} onClick={toggleDrone}>{voice.drone.playing ? "STOP️" : "PLAY"}</button>*/}
+                    {!voice.drone.playing && <button type="button" className="play-button not-playing" onClick={toggleDrone}><FontAwesomeIcon icon={faPlay} /></button>}
+                    {voice.drone.playing && <button type="button" className="play-button playing" onClick={toggleDrone}><FontAwesomeIcon icon={faStop} /></button>}
                 </div>
 
             </div>

@@ -3,6 +3,8 @@ import {useStores} from "../hooks/useStores";
 import React from "react";
 import {MIDI_DEFAULT_NOTE_OFF_VELOCITY} from "../utils/midi";
 import {noteNumber} from "../utils/midiMaths";
+import {faStop} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Panic = observer(() => {
 
@@ -40,8 +42,8 @@ export const Panic = observer(() => {
 
     return (
         <div className="panic">
-            <button type="button" className={`${playing ? "playing" : ""}`} onClick={allNotesOff} title="Stop all drone notes">ALL NOTES OFF</button>
-            <button type="button" onClick={panic} title="Send NOTE OFF messages for all notes on all channels.">PANIC</button>
+            <button type="button" className={`${playing ? "playing" : ""}`} onClick={allNotesOff} title="Stop drone notes"><FontAwesomeIcon icon={faStop} /></button>
+            <button type="button" onClick={panic} title="Send NOTE OFF messages for ALL NOTES on ALL CHANNELS.">PANIC</button>
         </div>
     );
 

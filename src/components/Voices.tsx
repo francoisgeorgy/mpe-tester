@@ -23,7 +23,7 @@ export const Voices = observer(() => {
             )}
             <div className="voices-options">
                 <div>
-                    <button type="button" onClick={() => state.addVoice()}>Add note</button>
+                    <button type="button" className="add-note-button" onClick={() => state.addVoice()}>Add note</button>
                 </div>
                 <div className="fg row">
                     <input type="checkbox" id="autoReset" value="1"

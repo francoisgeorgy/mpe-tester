@@ -8,6 +8,7 @@ import {
     MIDI_MAX_NOTE_NUMBER
 } from "../utils/midi";
 import {noteNumber} from "../utils/midiMaths";
+import midi from "./MidiStore";
 
 export const POLY_PRESS = "pp";
 export const CHAN_PRESS = "cp";
@@ -127,6 +128,7 @@ class StateStore {
         console.log("resetBend");
         this.voices.forEach((voice, i) => {
             voice.bend = 0;
+            midi.pitchBend(8192, voice.channel);
         });
     }
 

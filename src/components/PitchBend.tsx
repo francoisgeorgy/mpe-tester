@@ -1,14 +1,11 @@
 import {observer} from "mobx-react";
 import {useStores} from "../hooks/useStores";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {VoiceProps} from "../stores/StateStore";
 
 export const PitchBend = observer(({voice}: VoiceProps) => {
 
     const { midiStore: midi, stateStore: state } = useStores();
-    // const [bend, setBend] = useState(0);
-    // const [bendActive, setBendActive] = useState(false);
-    // const [autoReset, setAutoReset] = useState(true);
 
     const bendStart = () => {
         // setBendActive(true);

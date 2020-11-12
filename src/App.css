@@ -51,7 +51,7 @@ h3 {
 }
 
 .panic button {
-    /*background-color: #ffc688;*/
+    width: 70px;
     margin-right: 20px!important;
 }
 
@@ -83,10 +83,25 @@ h3 {
 .voices-options {
     display: flex;
     justify-content: space-between;
+    padding-left: 10px;
 }
 
 .voices-options div:first-child {
-    width: 165px;
+    width: 155px;
+}
+
+.add-note-button {
+    /*padding: 5px 10px;*/
+    width: 70px;
+    /*padding-left: 10px;*/
+    /*padding-right: 10px;*/
+    height: 25px;
+    background-color: #ffff79;
+    border: 1px solid #bbb;
+}
+
+.add-note-button:hover {
+    background-color: #dbdb00;
 }
 
 .help p {
@@ -100,8 +115,21 @@ h3 {
 
 .play-button {
     margin-top: 5px;
+    padding-top: 4px;
+    padding-bottom: 2px;
     width: 70px;
-    height: 25px;
+    /*height: 25px;*/
+    border: 1px solid #aaa;
+    background-color: #90ee90;
+}
+
+.play-button.not-playing:hover {
+    background-color: #dadada;
+}
+
+.playing {
+    background-color: #ff844e;
+    border: 1px solid #888;
 }
 
 .help {
